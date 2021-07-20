@@ -1,0 +1,7 @@
+
+1. Need to redo the modal section.
+2. Start at 1:04.00 in the below video
+    https://www.youtube.com/watch?v=ydGH0cz14LE&list=PLu0W_9lII9aikXkRE0WxDt1vozo3hnmtR&index=32&ab_channel=CodeWithHarry
+3. Need to learn the isset function in PHP.
+4. need to learn about the modals in php.
+5. Need to learn the javascript.
