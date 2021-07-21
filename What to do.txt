@@ -4,4 +4,5 @@
     https://www.youtube.com/watch?v=ydGH0cz14LE&list=PLu0W_9lII9aikXkRE0WxDt1vozo3hnmtR&index=32&ab_channel=CodeWithHarry
 3. Need to learn the isset function in PHP.
 4. need to learn about the modals in php.
-5. Need to learn the javascript.
+5. Need to learn the javascript (How to take the details from a table row and assign that value to the other textboxes, how to get the MySQL ID from the table using the id of the HTML tag and JS, How to create Pop-Ups in JS to confirm ant operation and passing the flow).
+

@@ -1,6 +1,10 @@
 <?php
+
+// In this PHP section we are creating the connection to the MySql DB notes
+
 $insert = false;
 $update = false;
+$delete = false; 
 $username="root";
 $passwd="Trimax@123";
 $servername="localhost";
@@ -13,6 +17,26 @@ if(!$conn){
     die("The connection is denied due to ".mysqli_connect_error($conn));
     echo "<br>";
 }
+
+// Logic to delete the rows.
+
+if(isset($_GET['delete'])){
+
+  $sno=$_GET['delete'];
+  $delquery="DELETE FROM `notes` WHERE `sno` = $sno";
+  $res=mysqli_query($conn,$delquery);
+  if($res){
+    $delete=true;
+  }
+  else{
+
+    echo "Deletion Operation failed.";
+  }
+
+
+}
+
+// Logic to insert and update the table
 
 if($_SERVER['REQUEST_METHOD']=="POST"){
 
@@ -47,10 +71,6 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
  else{
   echo "The record was not inserted successfully because of this error ---> ". mysqli_error($conn);
  }
-
-
-  // INSERT INTO `notes` (`sno`, `title`, `description`) VALUES (NULL, 'Read c++', 'Please read c++ it is very imp to us.');
-
 }
 }
 
@@ -69,10 +89,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
     <title>iNotes - A Note Taking App </title>
   </head>
   <body>
-<!-- Button trigger modal -->
 
-<!-- Edit Modal -->
-<!-- Edit Modal -->
+  // Modal for the edit Option.
+
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -83,6 +102,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
             <span aria-hidden="true">×</span>
           </button>
         </div>
+
+        // Form of Edit modal we can get from bootstrap called as live modal
+
         <form action="/crud/index.php" method="POST">
           <div class="modal-body">
             <input type="hidden" name="snoEdit" id="snoEdit">
@@ -105,11 +127,12 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
     </div>
   </div>
 
-
+// This is the navbar which we can get from bootstrap
  
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+     
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">iNotes</a>
+          <a class="navbar-brand" href="#"><img src="https://www.php.net/images/logos/new-php-logo.svg" height="28px" alt="">iNotes</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -133,6 +156,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
         </div>
       </nav>
   <?php  
+
+  // this is section for writing the logic for the success prompts for insert, delete and update
+
  if($insert){
  echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
   <strong>Success !!</strong> Your data is inserted Cheers !!.
@@ -149,9 +175,19 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
    </button>
  </div>";
   }
+
+  if($delete){
+    echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+     <strong>Success !!</strong> Your row is deleted successfully Cheers !!.
+     <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+       <span aria-hidden='true'>&times;</span>
+     </button>
+   </div>";
+    }
  
 ?>
 
+      // From here our container containing our form structue starts.
       <div class="container my-4">
         <form action="/crud/index.php" method="post">
             <h2>Add a Note</h2>
@@ -167,6 +203,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
           </form>
       </div>
 
+      // From here our container containing the result of select query starts.
+      // We are using the datatable here to display our results 
+
       <div class="container">
       <table class="table" id = "myTable"> <thead> 
       <tr>  
@@ -177,6 +216,9 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
       </tr>
         </thead>
         <tbody>
+          
+        // Below is the PHP code used for displaying the result in the table. 
+        
         <?php
         $selquery="SELECT * FROM `notes`";
         $res= mysqli_query($conn,$selquery);
@@ -198,16 +240,8 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 
 
       </div>
-    <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
 
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
     crossorigin="anonymous"></script>
@@ -218,16 +252,19 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"></script>
   <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
   <script>
-    $(document).ready(function () {
+    // Below JavaScript is used for datatable used for displaying the results on page.
+  $(document).ready(function () {
       $('#myTable').DataTable();
 
     });
     </script>
     <script>
-    edits = document.getElementsByClassName('edit');
-    Array.from(edits).forEach((element) => {
-      element.addEventListener("click", (e) => {
+      // Below JavaScript is used for taking the "title" and "description" from the table row of datatable and sending it in the Edit modal.
+        edits = document.getElementsByClassName('edit');
+        Array.from(edits).forEach((element) => {
+        element.addEventListener("click", (e) => {
         console.log("edit ");
         tr = e.target.parentNode.parentNode;
         title = tr.getElementsByTagName("td")[0].innerText;
@@ -238,6 +275,25 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
         snoEdit.value = e.target.id;
         console.log(e.target.id)
         $('#editModal').modal('toggle');
+      })
+    })
+
+    // Below JS is used to get the "sno" from the table and send it to the /crud/index.php?delete=${sno} 
+
+    deletes = document.getElementsByClassName('delete');
+    Array.from(deletes).forEach((element) => {
+      element.addEventListener("click", (e) => {
+        console.log("edit ");
+        sno = e.target.id.substr(1);
+
+        if (confirm("Are you sure you want to delete this note!")) {
+          console.log("yes");
+          window.location = `/crud/index.php?delete=${sno}`;
+          // TODO: Create a form and use post request to submit a form
+        }
+        else {
+          console.log("no");
+        }
       })
     })
     </script>
